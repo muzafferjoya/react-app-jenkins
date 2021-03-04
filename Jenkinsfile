@@ -17,7 +17,7 @@ node {
     
     stage('AWS Credentials Check') {
 
-        dir('/var/lib/jenkins/workspace/react-app'){
+        dir('/var/lib/jenkins/workspace/react-jenkins'){
 
         pwd(); 
 
