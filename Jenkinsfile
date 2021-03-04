@@ -1,17 +1,23 @@
 pipeline {
   agent any  
   stages {
-
-  	stage('Git clone'){
+    stage('Git Cloning'){
+      steps {
         git 'https://github.com/muzafferjoya/react-app-jenkins.git'
+      }
     }
-    
     stage('Install Packages') {
       steps {
         sh 'npm install'
       }
     }
-   
+    stage('Test and Build') {
+      parallel {
+        stage('Run Tests') {
+          steps {
+            sh 'npm run test'
+          }
+        }
         stage('Create Build Artifacts') {
           steps {
             sh 'npm run build'
@@ -30,9 +36,11 @@ pipeline {
               
               s3Upload(bucket: 'muzaffar-react', workingDir:'build', includePathPattern:'**/*');
             }
-            
+            mail(subject: 'Staging Build', body: 'New Deployment to Staging', to: 'muzaffar.khan@eroam.com')
           }
         }
         
       }
     }
+  }
+}
