@@ -15,7 +15,7 @@ node {
 	}
 
     
-    stage('AWS Credentials Check') {
+    stage('Deploy To S3 Bucket') {
 
         dir('/var/lib/jenkins/workspace/react-jenkins'){
 
