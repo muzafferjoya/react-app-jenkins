@@ -1,7 +1,7 @@
 node {
     
     stage('Git clone'){
-        git 'https://github.com/muzafferjoya/Node-Jenkins.git'
+        git 'https://github.com/muzafferjoya/react-app-jenkins.git'
     }
 
     stage('Install Dependencies'){
