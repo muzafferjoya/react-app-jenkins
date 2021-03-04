@@ -25,7 +25,10 @@ node {
 
         def identity=awsIdentity();
 		
-		s3Upload(bucket:"muzaffar-react", workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, node_modules/*');
+	s3Upload(bucket:"muzaffar-react", workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, node_modules/*');
+	s3Delete(bucket: 'muzaffar-react', path:'**/*');
+	s3Upload(bucket:"muzaffar-react", workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, node_modules/*');
+	
                  
         }
 
