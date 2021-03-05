@@ -34,7 +34,7 @@ pipeline {
           steps {
             withAWS(region:'us-east-1',credentials:'aws-id') {
               
-              s3Upload(bucket: 'muzaffar-react', workingDir:'build', includePathPattern:'**/*');
+              s3Upload(bucket: 'muzaffar-react', workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
             }
             mail(subject: 'Staging Build', body: 'New Deployment to Staging', to: 'muzaffar.khan@eroam.com')
           }
