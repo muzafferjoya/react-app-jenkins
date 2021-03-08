@@ -1,46 +1,37 @@
-pipeline {
-  agent any  
-  stages {
-    stage('Git Cloning'){
-      steps {
+node {
+    
+    stage('Git clone'){
         git 'https://github.com/muzafferjoya/react-app-jenkins.git'
-      }
     }
-    stage('Install Packages') {
-      steps {
-        sh 'npm install'
-      }
-    }
-    stage('Test and Build') {
-      parallel {
-        stage('Run Tests') {
-          steps {
-            sh 'npm run test'
-          }
+
+    stage('Install Dependencies'){
+	   sh 'npm install'
+}
+
+	stage('Test'){
+		sh 'npm run test'
+	}
+
+	stage('Building'){
+		sh 'npm run build'
+	}
+
+    
+    stage('AWS Credentials Check') {
+
+        dir('/var/lib/jenkins/workspace/job-1'){
+
+        pwd(); 
+
+        withAWS(region:'us-east-1',credentials:'aws-id') {
+
+        def identity=awsIdentity();
+		
+	    	s3Upload(bucket:"muzaffar-react", workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, node_modules/*');
+                 
         }
-        stage('Create Build Artifacts') {
-          steps {
-            sh 'npm run build'
-          }
-        }
-      }
-    }
-    stage('Deployment') {
-      parallel {
-        stage('Staging') {
-          when {
-            branch 'master'
-          }
-          steps {
-            withAWS(region:'us-east-1',credentials:'aws-id') {
-              
-            s3Upload(bucket: 'muzaffar-react', workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
-            }
-            mail(subject: 'Staging Build', body: 'New Deployment to Staging', to: 'muzaffar.khan@eroam.com')
-          }
-        }
-        
-      }
-    }
-  }
+
+        };
+
+	}
 }
