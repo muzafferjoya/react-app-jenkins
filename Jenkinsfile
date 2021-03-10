@@ -11,7 +11,7 @@ pipeline {
     npm_config_cache = 'npm-cache'
   }
   stages {
-    stage('Git Clone'){
+   stage('Git Clone'){
       steps {
         git 'https://github.com/muzafferjoya/react-app-jenkins.git'
       }
@@ -28,8 +28,20 @@ pipeline {
             sh 'npm run test'
           }
         }
-        
+        stage('Create Build Artifacts') {
+          steps {
+            sh 'npm run build'
+          }
+        }
       }
     }
+
+stage('Production') {
+  steps {
+    withAWS(region:'us-east-1',credentials:'aws-id') {
+    s3Upload(bucket: 'muzaffar-prod', workingDir:'dist', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
+            }
+          }
+        }
     }
 }
