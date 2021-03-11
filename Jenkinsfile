@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
      image 'node:14.16.0'
-     args '-p 3000:3000'
+     args '-p 8081:8081'
     }
   }
   environment {
@@ -39,7 +39,7 @@ pipeline {
 stage('Production') {
   steps {
     withAWS(region:'us-east-1',credentials:'aws-id') {
-    s3Upload(bucket: 'muzaffar-prod', workingDir:'dist', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
+    s3Upload(bucket: 'muzaffar-prod', workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
             }
           }
         }
