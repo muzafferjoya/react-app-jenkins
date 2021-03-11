@@ -33,20 +33,7 @@ pipeline {
         
       }
     }
-        stage('Create Build Artifacts') {
-          steps {
-            sh 'npm run build'
-          }
-        }
+      
       }
+   
     }
-
-stage('Production') {
-  steps {
-    withAWS(region:'us-east-1',credentials:'aws-id') {
-    s3Upload(bucket: 'muzaffar-prod', workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
-            }
-          }
-        }
-    }
-}
