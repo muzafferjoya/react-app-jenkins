@@ -2,11 +2,9 @@ pipeline {
   agent {
     docker {
      image 'node:14.16.0'
-<<<<<<< HEAD
+
      args '-p 3000:3000'
-=======
-     args '-p 8081:8081'
->>>>>>> master
+
     }
   }
   environment {
@@ -15,11 +13,7 @@ pipeline {
     npm_config_cache = 'npm-cache'
   }
   stages {
-<<<<<<< HEAD
-    stage('Git Clone'){
-=======
    stage('Git Clone'){
->>>>>>> master
       steps {
         git 'https://github.com/muzafferjoya/react-app-jenkins.git'
       }
@@ -36,11 +30,9 @@ pipeline {
             sh 'npm run test'
           }
         }
-<<<<<<< HEAD
         
       }
     }
-=======
         stage('Create Build Artifacts') {
           steps {
             sh 'npm run build'
@@ -56,6 +48,5 @@ stage('Production') {
             }
           }
         }
->>>>>>> master
     }
 }
