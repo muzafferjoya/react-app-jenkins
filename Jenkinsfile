@@ -1,8 +1,8 @@
 pipeline {
   agent {
     docker {
-     image 'node:14.16.0'
-     args '-p 3002:3002'
+      image 'node:14'
+      args '-p 20001-20100:3000'
     }
   }
   environment {
@@ -11,13 +11,12 @@ pipeline {
     npm_config_cache = 'npm-cache'
   }
   stages {
-    stage('Checkout External Project'){
+
+  stage('Checkout External Project'){
       steps{
-      git branch: 'staging',
       url: 'https://github.com/muzafferjoya/react-app-jenkins.git'
-      
+      }
     }
-  }
     stage('Install Packages') {
       steps {
         sh 'npm install'
@@ -37,14 +36,31 @@ pipeline {
         }
       }
     }
-
-stage('Deployment on S3 Bucket') {
-  steps {
-    withAWS(region:'us-east-1',credentials:'muzaffar-aws-id') {
-    s3Delete(bucket: 'muzaffar-khan/staging', path:'**/*');
-    s3Upload(bucket: 'muzaffar-khan/staging', workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
+    stage('Deployment') {
+      parallel {
+        stage('Staging') {
+          when {
+            branch 'staging'
+          }
+          steps {
+            withAWS(region:'us-east-1',credentials:'muzaffar-aws-id') {
+              s3Upload(bucket: 'muzaffar-khan/staging', workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
             }
+            
           }
         }
-}
+        stage('Production') {
+          when {
+            branch 'master'
+          }
+          steps {
+            withAWS(region:'us-east-1',credentials:'muzaffar-aws-id') {
+              s3Upload(bucket: 'muzaffar-khan/develop', workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
+            }
+            
+          }
+        }
+      }
+    }
+  }
 }
