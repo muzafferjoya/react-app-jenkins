@@ -13,7 +13,6 @@ pipeline {
   stages {
     stage('Checkout External Project'){
       steps{
-      git branch: 'master',
       git 'https://github.com/muzafferjoya/react-app-jenkins.git'
       
     }
