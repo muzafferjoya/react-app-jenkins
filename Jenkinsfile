@@ -39,7 +39,7 @@ pipeline {
           }
         }
       }
-    }
+    
 
 stage('Deployment on S3 Bucket') {
   steps {
@@ -50,4 +50,4 @@ stage('Deployment on S3 Bucket') {
           }
         }
     }
-}
+    
