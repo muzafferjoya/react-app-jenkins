@@ -39,7 +39,7 @@ pipeline {
           steps {
             withAWS(region:'us-east-1',credentials:'muzaffar-aws-id') {
               s3Delete(bucket: 'muzaffar-khan/staging', path:'**/*')
-              s3Upload(bucket:"muzaffar-khan/staging", workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
+              s3Upload(bucket:'muzaffar-khan/staging', workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
             }
             
           }
@@ -50,8 +50,8 @@ pipeline {
           }
           steps {
             withAWS(region:'us-east-1',credentials:'muzaffar-aws-id') {
-              s3Delete(bucket: 'muzaffar-khan/staging', path:'**/*')
-              s3Upload(bucket:"muzaffar-khan/staging", workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
+              s3Delete(bucket: 'muzaffar-khan/master', path:'**/*')
+              s3Upload(bucket:'muzaffar-khan/master', workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
             }
             
           }
