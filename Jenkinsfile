@@ -42,7 +42,7 @@ stage('Deployment on S3 Bucket') {
   steps {
     withAWS(region:'us-east-1',credentials:'muzaffar-aws-id') {
     s3Delete(bucket: 'muzaffar-khan/develop', path:'**/*');
-    s3Upload(bucket: 'muzaffar-khan/develop', workingDir:'dist', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
+    s3Upload(bucket: 'muzaffar-khan/develop', workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
             }
           }
         }
