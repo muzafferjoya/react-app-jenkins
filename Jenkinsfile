@@ -14,7 +14,7 @@ pipeline {
 
   stage('Checkout External Project'){
       steps{
-      url: 'https://github.com/muzafferjoya/react-app-jenkins.git'
+      git 'https://github.com/muzafferjoya/react-app-jenkins.git'
       }
     }
     stage('Install Packages') {
