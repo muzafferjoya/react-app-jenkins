@@ -1,29 +1,34 @@
 pipeline {
-  agent any  
-  stages {
-    stage('Git Cloning'){
-      steps {
-        git 'https://github.com/muzafferjoya/react-app-jenkins.git'
-      }
+  agent {
+    docker {
+      image 'node:14.16.0'
+      args '-p 20001-20100:3000'
     }
+  }
+  environment {
+    CI = 'true'
+    HOME = '.'
+    npm_config_cache = 'npm-cache'
+  }
+  stages {
     stage('Install Packages') {
       steps {
         sh 'npm install'
       }
     }
-    stage('Testing'){
-      steps {
-        sh 'npm run test'
-      }
-    }
-    stage('Build') {    
-        
+    stage('Test and Build') {
+      parallel {
+        stage('Run Tests') {
+          steps {
+            sh 'npm run test'
+          }
+        }
         stage('Create Build Artifacts') {
           steps {
             sh 'npm run build'
           }
         }
-      
+      }
     }
     stage('Deployment') {
       parallel {
@@ -33,9 +38,8 @@ pipeline {
           }
           steps {
             withAWS(region:'us-east-1',credentials:'muzaffar-aws-id') {
-            s3Upload(bucket:"muzaffar-khan/staging", workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
-			s3Delete(bucket: 'muzaffar-khan/staging', path:'**/*');
-			s3Upload(bucket:"muzaffar-khan/staging", workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
+              s3Delete(bucket: 'muzaffar-khan/staging', path:'**/*')
+              s3Upload(bucket:"muzaffar-khan/staging", workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
             }
             
           }
@@ -46,9 +50,8 @@ pipeline {
           }
           steps {
             withAWS(region:'us-east-1',credentials:'muzaffar-aws-id') {
-            s3Upload(bucket:"muzaffar-khan/staging", workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
-			s3Delete(bucket: 'muzaffar-khan/staging', path:'**/*');
-			s3Upload(bucket:"muzaffar-khan/staging", workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
+              s3Delete(bucket: 'muzaffar-khan/staging', path:'**/*')
+              s3Upload(bucket:"muzaffar-khan/staging", workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
             }
             
           }
