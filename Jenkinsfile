@@ -38,7 +38,7 @@ pipeline {
             sh 'npm run build'
           }
         }
-      }
+      
     
 
 stage('Deployment on S3 Bucket') {
@@ -49,5 +49,5 @@ stage('Deployment on S3 Bucket') {
             }
           }
         }
+        }
     }
-    
