@@ -36,32 +36,5 @@ pipeline {
         }
       }
     }
-    stage('Deployment') {
-      parallel {
-        stage('Staging') {
-          when {
-            branch 'staging'
-          }
-          steps {
-            withAWS(region:'us-east-1',credentials:'muzaffar-aws-id') {
-              s3Upload(bucket: 'muzaffar-khan/staging', workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
-            }
-            
-          }
-        }
-        stage('Production') {
-          when {
-            branch 'master'
-          }
-          steps {
-            withAWS(region:'us-east-1',credentials:'muzaffar-aws-id') {
-              s3Upload(bucket: 'muzaffar-khan/develop', workingDir:'build', includePathPattern:'**/*', excludePathPattern:'.git/*, **/node_modules/**');
-            }
-            
-          }
-        }
-      }
-      
-    }
-  }
-}
+   
+   
