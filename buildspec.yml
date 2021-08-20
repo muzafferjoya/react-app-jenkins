@@ -16,5 +16,6 @@ phases:
       
 artifacts:
   files:
-    - index.html
-    - build/**/*
+    - '**/*'
+  base-directory: 'build*'
+  discard-paths: yes
