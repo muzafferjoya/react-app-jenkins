@@ -13,7 +13,8 @@ phases:
   post_build:
     commands:
       - echo "Updating files in the S3 bucket..."
-      # - aws s3 sync build/**  s3://build-source-code/build-code
+      
 artifacts:
   files:
-    - build/**
+    - index.html
+    - build/**/*
